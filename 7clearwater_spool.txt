@@ -1,0 +1,62 @@
+SQL> SELECT to_char(sysdate, 'DD Month YYYY   Day  Year HH:MI:SS')  FROM dual;
+
+TO_CHAR(SYSDATE,'DDMONTHYYYYDAYYEARHH:MI:SS')                                   
+--------------------------------------------------------------------------------
+25 Marzo      2026   Miércoles  Twenty Twenty-Six 01:53:22                      
+
+SQL> SELECT COUNT(*)
+  2  FROM   inventory;
+
+  COUNT(*)                                                                      
+----------                                                                      
+        32                                                                      
+
+SQL> SELECT SUM(inv_qoh), MIN(inv_price), MAX(inv_price)
+  2  FROM   inventory;
+
+SUM(INV_QOH) MIN(INV_PRICE) MAX(INV_PRICE)                                      
+------------ -------------- --------------                                      
+        3143          15,95         259,99                                      
+
+SQL> 
+SQL> SELECT item_id, SUM(inv_qoh), MIN(inv_price), MAX(inv_price)
+  2  FROM   inventory
+  3  GROUP BY item_id;
+
+   ITEM_ID SUM(INV_QOH) MIN(INV_PRICE) MAX(INV_PRICE)                           
+---------- ------------ -------------- --------------                           
+         2           28         259,99         259,99                           
+         3          688          29,95          29,95                           
+         4          726          59,95          59,95                           
+         5         1008          15,99          15,99                           
+         1          143         199,95         209,95                           
+         6          250          15,95          15,95                           
+         7          300          19,99          19,99                           
+
+7 filas seleccionadas.
+
+SQL> SELECT item_id, SUM(inv_qoh), MIN(inv_price), MAX(inv_price)
+  2  FROM   inventory
+  3  WHERE  inv_size IN ('L','M')
+  4  GROUP BY item_id;
+
+   ITEM_ID SUM(INV_QOH) MIN(INV_PRICE) MAX(INV_PRICE)                           
+---------- ------------ -------------- --------------                           
+         3          399          29,95          29,95                           
+         4          591          59,95          59,95                           
+         1           17         199,95         209,95                           
+         6          200          15,95          15,95                           
+         7          200          19,99          19,99                           
+
+SQL> SELECT item_id, SUM(inv_qoh), MIN(inv_price), MAX(inv_price)
+  2  FROM   inventory
+  3  WHERE  inv_size IN ('L','M')
+  4  GROUP BY item_id
+  5  HAVING SUM(inv_qoh) > 200;
+
+   ITEM_ID SUM(INV_QOH) MIN(INV_PRICE) MAX(INV_PRICE)                           
+---------- ------------ -------------- --------------                           
+         3          399          29,95          29,95                           
+         4          591          59,95          59,95                           
+
+SQL> SPOOL OFF;
